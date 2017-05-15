@@ -14,7 +14,7 @@ public class Main {
 		Clock clock = new Clock();
 		Cal cal = new Cal();
 		Note note = new Note(50);
-		setAlarm alarm = new setAlarm(5);
+		
 		
 		JPanel container1 = new JPanel();
 		JPanel container2 = new JPanel();		
