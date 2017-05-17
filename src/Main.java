@@ -14,19 +14,19 @@ public class Main {
 		Clock clock = new Clock();
 		Cal cal = new Cal();
 		Note note = new Note(50);
-		
+		Alarm alarm = new Alarm();
 		
 		JPanel container1 = new JPanel();
 		JPanel container2 = new JPanel();		
 		JPanel tdContainer = new JPanel();
 		
 		container1.setLayout(new BoxLayout(container1, BoxLayout.X_AXIS));	
-		//container2.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
+		container2.setLayout(new BoxLayout(container2, BoxLayout.X_AXIS));
 		
 		container1.add(clock);
 		container1.add(cal);
 		
-		//container2.add(alarm);
+		container2.add(alarm);
 		container2.add(note);
 
 		

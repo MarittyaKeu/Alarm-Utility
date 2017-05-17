@@ -8,8 +8,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 
-public class alarm extends JPanel{
-	public alarm(){
+public class Alarm extends JPanel{
+	public Alarm(){
 		 super.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	       
 	       //labels to hold time/subject/Body

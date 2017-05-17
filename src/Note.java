@@ -66,13 +66,6 @@ public class Note extends JPanel{ // 8-31-2015
         
         //System.out.print(table.getRowCount());
        
-        
-        
-        
-         
-        
-        
-        
   
         
         table.setRowHeight(35);
