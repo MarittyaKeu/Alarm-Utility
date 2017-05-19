@@ -1,0 +1,19 @@
+----------------------------------------------------------------
+Thu May 18 13:33:29 EDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-015c-1c9f-2077-000006b36d98 
+on database directory C:\Users\sokth\Desktop\UML\workspace\AlarmClock\dbAllen with class loader sun.misc.Launcher$AppClassLoader@2b193f2d 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_131/db/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-b11
+user.dir=C:\Users\sokth\Desktop\UML\workspace\AlarmClock
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu May 18 13:36:55 EDT 2017: Shutting down Derby engine
+----------------------------------------------------------------
+Thu May 18 13:36:55 EDT 2017:
+Shutting down instance a816c00e-015c-1c9f-2077-000006b36d98 on database directory C:\Users\sokth\Desktop\UML\workspace\AlarmClock\dbAllen with class loader sun.misc.Launcher$AppClassLoader@2b193f2d 
+----------------------------------------------------------------
