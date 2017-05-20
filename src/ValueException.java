@@ -3,7 +3,7 @@ public class ValueException extends Exception {
 	
 	
 	  public ValueException(){
-	        this("Value can not be null");
+	        this("Subject, Sound, Date, and Time can not be null");
 	    }
 	    
 	    public ValueException(String message){

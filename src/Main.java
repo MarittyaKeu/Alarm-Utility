@@ -1,19 +1,39 @@
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.sql.SQLException;
-
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
-
+import java.util.Date;
+import java.sql.ResultSet;
 
 public class Main {
 
+//	@SuppressWarnings("unused")
 	public static void main(String[] args)throws SQLException {
 		// TODO Auto-generated method stub
 		Dimension dim = new Dimension(1500, 1200);
 		JFrame frame = new JFrame("Alarm Clock");
-		databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
+		Date date = new Date();
 		
+		
+		try{
+			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");		
+			dbCon.insert("ok yes subject", "you can do it", "blue.wav", date, null);
+			ResultSet rs = dbCon.getResultSetOn("2017-05-22");
+					
+					
+
+			while(rs.next()){
+            	System.out.printf("ID %d,Subject %s, Body %s, Sound %s, Date %s, Time %s \n", 
+            			rs.getInt("ID"), rs.getString("subject"), rs.getString("body"), rs.getString("sound"), 
+            			rs.getString("date"), rs.getString("time"));
+            }
+		}catch (SQLException ex){
+			ex.printStackTrace();
+		}
+		catch (ValueException ex){
+			System.out.print(ex.getMessage());
+		}
 		
 		
 		Clock clock = new Clock();
