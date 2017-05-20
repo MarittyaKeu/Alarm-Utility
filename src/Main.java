@@ -17,12 +17,11 @@ public class Main {
 		
 		
 		try{
-			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");		
+			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
+			
 			dbCon.insert("ok yes subject", "you can do it", "blue.wav", date, null);
-			ResultSet rs = dbCon.getResultSetOn("2017-05-22");
-					
-					
-
+			ResultSet rs = dbCon.getResultSet();
+			
 			while(rs.next()){
             	System.out.printf("ID %d,Subject %s, Body %s, Sound %s, Date %s, Time %s \n", 
             			rs.getInt("ID"), rs.getString("subject"), rs.getString("body"), rs.getString("sound"), 
@@ -35,7 +34,7 @@ public class Main {
 			System.out.print(ex.getMessage());
 		}
 		
-		
+		//sdkjhskjfnsdkjfndgfdg
 		Clock clock = new Clock();
 		Cal cal = new Cal();
 		Note note = new Note(50);
