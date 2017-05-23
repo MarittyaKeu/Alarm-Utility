@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
@@ -8,6 +9,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Alarm extends JPanel{
 	public Alarm(){
@@ -55,12 +58,33 @@ public class Alarm extends JPanel{
 	       group.add(pmButton);
 	       
 	       //add and clear buttons
-	       JButton addButton, clearButton;
+	       JButton addButton, clearButton, btnDelete, btnEdit;
 	       addButton = new JButton("Add");
 	       clearButton = new JButton("Clear");
+	       btnDelete = new JButton("Delete");
+	       btnEdit = new JButton("Edit");
+	       
 	       
 	       addButton.setFont(new Font("Arial", 0, 25));
 	       clearButton.setFont(new Font("Arial", 0, 25));
+	       btnDelete.setFont(new Font("Arial", 0, 25));
+	       btnEdit.setFont(new Font("Arial", 0, 25));
+	       btnDelete.setEnabled(false);
+	       
+	       
+	       
+	       //delete ActionListener to button
+	       btnDelete.addActionListener(new ActionListener(){
+	            public void actionPerformed(ActionEvent event){
+	                              
+	                 
+	            }
+	        });
+	       
+	       
+	       
+	       
+	       
 	       
 	       //time container that gets added to main 
 	       JPanel container1 = new JPanel();
@@ -91,6 +115,8 @@ public class Alarm extends JPanel{
 	       JPanel buttonContainer = new JPanel();
 	       buttonContainer.add(addButton);
 	       buttonContainer.add(clearButton);
+	       buttonContainer.add(btnDelete);
+	       buttonContainer.add(btnEdit);
 	       
 	       mainContainer.add(container1);
 	       mainContainer.add(container2);

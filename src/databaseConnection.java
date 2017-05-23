@@ -32,22 +32,25 @@ public class databaseConnection {
        dbCon = DriverManager.getConnection(host, userName, password); 
        try{	    
     	   stmt = dbCon.createStatement();	
+//    	   System.out.print("ok in db");
 //    	   stmt.executeUpdate(sqlDropTable);
-//    	   if (tableExist(dbCon) == false) stmt.executeUpdate(sqlCreateTable);          
+//    	   if (tableExist(dbCon) == false) System.out.println("true or false");
+//    	   		stmt.executeUpdate(sqlCreateTable);
+    	   
        }catch(SQLException ex){
             ex.printStackTrace();
        }
     }
     
     
-	public int insert(String subject, String body, String sound, Date date, Time time)throws SQLException, ValueException{
+	public int insert(String subject, String body, String sound, Date date, String time)throws SQLException, ValueException{
 	    	 if (subject == null || sound == null || date == null) throw new ValueException();
 	    	   sqlPrepare = dbCon.prepareStatement("INSERT INTO tblAlarm (subject, body, sound, Date, Time) VALUES (?, ?, ?, ?, ?)");
 	    	   sqlPrepare.setString(1, subject);
 	    	   sqlPrepare.setString(2, body);
 	    	   sqlPrepare.setString(3, sound);
 	    	   sqlPrepare.setDate(4, new java.sql.Date(date.getTime())); //java.util.data is not the same as java.sql.date
-	    	   sqlPrepare.setTime(5, time);
+	    	   sqlPrepare.setString(5, time);
 	
 	//     catch(ValueException ex){ //if we don't handle ValueException here, it will passed to its parent, and it parent and it parent ...
 	//    	 ex.printStackTrace();
@@ -76,6 +79,23 @@ public class databaseConnection {
     	 
     }
     
+    public int delete(String id[])throws SQLException{
+    	String sqlDelete = "DELETE FROM tblAlarm WHERE id IN (";
+    	for (int i = 0; i < id.length; i++){
+    		if (i == (id.length - 1)) 
+    			sqlDelete += id[i];	
+    		else
+    			sqlDelete += id[i] + ',';
+    	}
+    	sqlDelete += ')';
+    	return stmt.executeUpdate(sqlDelete); 
+    }
+    
+    public int deleteAll()throws SQLException{
+    	String sqlDeleteAll = "DELETE FROM tblAlarm";
+    	return stmt.executeUpdate(sqlDeleteAll);
+    }
+    
     public String getDatabaseUserName(){
     	return userName;
     }
@@ -88,12 +108,14 @@ public class databaseConnection {
     private boolean tableExist(Connection connection)throws SQLException{
     	boolean tblExist = false;	
     	DatabaseMetaData dbMeta = connection.getMetaData();
-    	ResultSet rs = dbMeta.getTables(null, null, "%", null);
-    	
+    	ResultSet rs = dbMeta.getTables(null, null, "%", null);    	
     	while (rs.next()) {   	 		   	 	  	  
-    		if (rs.getString(3) == "TBLALARM") tblExist = true;   	 		   
-    	}
-    	
+    		if (rs.getString(3) == "TBLALARM") {
+    			tblExist = true;  	 		 
+    			System.out.print("in the tableExist");
+    			break;
+    		}
+    	}    	
     	return tblExist;
     }
     

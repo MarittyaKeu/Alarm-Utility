@@ -1,47 +1,52 @@
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.DefaultTableModel;
+
+//import Main.CheckBoxModelListener;
+
 import javax.swing.JPanel;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import javax.swing.event.TableModelListener;
+
 
 public class Note extends JPanel{ // 8-31-2015
     private JTable table;
    private DefaultTableModel model;
     private String[] columnsName = {"No", "Date", "Time", "Subject", "Body", "Sound", "Delete"};
     private JScrollPane scrollPane;
+    boolean enableBtnDelete = false;
+    databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
     
-    public Note(int row){
+    public Note(int row) throws SQLException{
     	super.setLayout(new BorderLayout());
-        model = new DefaultTableModel(columnsName, row);
+        model = new DefaultTableModel(columnsName, row);      
+        
         
         table = new JTable(model){      	
             public boolean isCellEditable(int row, int col){
-                if (col == 5) return true; 
-                	else return false;            	
-            }          
+            	try{
+            		if (row < dbCon.getSize() &&  col == 6) return true;               	 
+            	}catch(SQLException ex){
+            		ex.printStackTrace();
+            	}
+                return false;          	
+            }        
             
-//            DefaultTableCellRenderer renderRight = new DefaultTableCellRenderer();
-//            DefaultTableCellRenderer renderLeft = new DefaultTableCellRenderer();
-//
-//            { // initializer block
-//                renderRight.setHorizontalAlignment(SwingConstants.RIGHT);
-//                renderLeft.setHorizontalAlignment(SwingConstants.CENTER);
-//            }
-//            
-//            @Override
-//            public TableCellRenderer getCellRenderer (int row, int col) {
-//            	if (col == 0) return renderRight;
-//            		else return null;
-//            }
-                     
             public Class<?> getColumnClass(int column) {
                 switch (column) {
                 	case 0: return Integer.class;
@@ -52,7 +57,8 @@ public class Note extends JPanel{ // 8-31-2015
                     case 5: return String.class;
                     default: return Boolean.class;
                 }
-            }
+            }         
+            
         };
         
         
@@ -64,7 +70,9 @@ public class Note extends JPanel{ // 8-31-2015
         table.getColumnModel().getColumn(5).setPreferredWidth(150);
         table.getColumnModel().getColumn(6).setPreferredWidth(50);
         
-        //System.out.print(table.getRowCount());
+//        table.addMouseListener(new mouseAdapter());
+        table.getModel().addTableModelListener(new tableModelListener());
+        
        
   
         
@@ -78,21 +86,41 @@ public class Note extends JPanel{ // 8-31-2015
          scrollPane = new JScrollPane(table);
          scrollPane.setPreferredSize(new Dimension(1400, 600));
          
-         table.setValueAt(999, 0, 0); 
-         table.setValueAt("05/14/2017", 0, 1); 
-          table.setValueAt("12:30 PM", 0, 2); 
-          table.setValueAt("Go to School", 0, 3);
-          table.setValueAt("There is a quiz on Friday", 0, 4);
-          table.setValueAt("sky.wav", 0, 5);
-          table.setValueAt(true, 0, 6);
-          
+         
+         try{
+        	 
+        	 ResultSet rs = dbCon.getResultSet();
+        	 int i = 0;
+        	 while (rs.next()){
+        		 table.setValueAt(rs.getString("ID"), i, 0);
+        		 table.setValueAt(rs.getString("date"), i, 1);
+        		 table.setValueAt(rs.getString("time"), i, 2);
+        		 table.setValueAt(rs.getString("subject"), i, 3);
+        		 table.setValueAt(rs.getString("body"), i, 4);
+        		 table.setValueAt(rs.getString("sound"), i, 5);
+        		 table.setValueAt(false, 0, 6);
+        		 
+        		 i++;
+        	 }
+        	 
+         }catch (SQLException ex){
+        	 System.out.print(ex.getMessage());
+         }     
           add(scrollPane);           
-        }          
+        }//end constructor() 
+      
     
+    //trigger when checkbox is checked in cell
+    private class tableModelListener implements TableModelListener{    	
+    	public void tableChanged(TableModelEvent event) {
+            int row = event.getLastRow();
+            int col = event.getColumn();
+            if (col == 6) {
+                TableModel model = (TableModel) event.getSource();
+                enableBtnDelete = (Boolean) model.getValueAt(row, col);                
+            }
+            System.out.println(enableBtnDelete);
+        }
+    }//end event class
     
-    
-    
-    
-    
-    
-    }//end constructor() 
+}//end class
