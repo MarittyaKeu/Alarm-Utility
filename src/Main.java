@@ -18,6 +18,7 @@ public class Main {
 		int rowNumber = 25;
 		
 		try{
+<<<<<<< HEAD
 			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");		
 			dbCon.insert("OPL Summer class", "Meeting on every other sunday at 9am", "blue.wav", date, "7:35");
 //			dbCon.deleteAll();
@@ -29,6 +30,18 @@ public class Main {
 //            			rs.getString("date"), rs.getString("time"));
 //            }
 		if (dbCon.getSize() > 25) rowNumber = dbCon.getSize();
+=======
+			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
+			
+			dbCon.insert("ok yes subject", "you can do it", "blue.wav", date, null);
+			ResultSet rs = dbCon.getResultSet();
+			
+			while(rs.next()){
+            	System.out.printf("ID %d,Subject %s, Body %s, Sound %s, Date %s, Time %s \n", 
+            			rs.getInt("ID"), rs.getString("subject"), rs.getString("body"), rs.getString("sound"), 
+            			rs.getString("date"), rs.getString("time"));
+            }
+>>>>>>> 9716dd344887351fa2f26ba11705495e10b865f9
 		}catch (SQLException ex){
 			ex.printStackTrace();
 		}
@@ -36,7 +49,7 @@ public class Main {
 			System.out.print(ex.getMessage());
 		}
 		
-		
+		//sdkjhskjfnsdkjfndgfdg
 		Clock clock = new Clock();
 		Cal cal = new Cal();
 		Note note = new Note(rowNumber);
