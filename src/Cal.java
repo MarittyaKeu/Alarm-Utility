@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -6,26 +7,21 @@ import java.util.Calendar;
 import javax.swing.JPanel;
 
 public class Cal extends JPanel{
-	private int month, year, date, day, lastDate;
+	private int month, year, date, day, lastDate, npMonth; //nextPreviousMonth
 	private dayName dName; 
 	
 	
 	public Cal(){
 		super.setLayout(new BorderLayout());
 		Calendar now = Calendar.getInstance();
-		month = now.get(Calendar.MONTH); //return month
+		npMonth = month = now.get(Calendar.MONTH); //return month
 		year = now.get(Calendar.YEAR); //return year
 		date = now.get(Calendar.DATE); //return date
 		lastDate = now.getActualMaximum(Calendar.DAY_OF_MONTH); //return the last day of month
 		now.set(year, month, 1);
 		day = now.get(Calendar.DAY_OF_WEEK); //return day (Sunday = 1 to Saturday = 7)
 		
-		
-		
-		
-		
-		
-		//System.out.printf("Year %d Month %d Date %d Day of week %d", year, month, date, day);
+		System.out.printf("Year %d Month %d Date %d Day of week %d", year, month, date, day);
 	}
 	
 	
@@ -58,7 +54,7 @@ public class Cal extends JPanel{
 		int arrX[] = {50, 150, 250, 350, 450, 550, 650};
 		int y = 120, j = 0;
 		
-		g.setFont(new Font("arial", 1, 20));
+		g.setFont(new Font("arial", Font.PLAIN, 22));
 		g.drawString(getMonthName(month).getMonthName(), 325, 70);
 		g.drawString("SUN", arrX[0], y);
 		g.drawString("MON", arrX[1], y);
@@ -78,10 +74,26 @@ public class Cal extends JPanel{
 				case "SAT" : j = 6; break;
 				default : j = 0; if (i > 0) y += 60;			
 			}
+			
+			if ((month == npMonth) && (date == mon.get(i).getDay())){
+				g.setColor(Color.RED);
+				g.setFont(new Font("arial", Font.BOLD, 25));
+			}else{
+				g.setColor(Color.BLACK);
+				g.setFont(new Font("arial", Font.PLAIN, 22));
+			}
+			
 			g.drawString(mon.get(i).getDay().toString(), arrX[j], y + 60);
 		}
 	}
 	
+	private int getNextMonth(){
+		return npMonth++;
+	}
+	
+	private int getPreviousMonth(){
+		return npMonth--;
+	}
 	
 	
 	
