@@ -39,8 +39,9 @@ public class Clock extends JPanel{
 		int minutes = cal.get(Calendar.MINUTE);
 		int seconds = cal.get(Calendar.SECOND);
 		sAngle -= (seconds * sAnglePerSecond);
-		mAngle -= (minutes * 6); // (minutes * 60 * 0.1) 
-		hAngle -= ((hours * 3600) * hAnglePerSecond); 
+		mAngle -= ((minutes * 6) + (seconds * mAnglePerSecond)); // (minutes * 60 * 0.1) 
+//		hAngle -= (hours * 3600 * hAnglePerSecond) + ((minutes * 6) + (seconds * hAnglePerSecond)); 
+		hAngle -= (hours * 3600 + minutes * 60 + seconds) * hAnglePerSecond;
 
 		ticking();
 		ActionListener actionTask = new ActionListener(){

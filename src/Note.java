@@ -119,7 +119,7 @@ public class Note extends JPanel{ // 8-31-2015
                 TableModel model = (TableModel) event.getSource();
                 enableBtnDelete = (Boolean) model.getValueAt(row, col);                
             }
-            System.out.println(enableBtnDelete);
+//            System.out.println(enableBtnDelete);
         }
     }//end event class
     

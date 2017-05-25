@@ -24,6 +24,7 @@ public class Main {
 
 			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");		
 			dbCon.insert("OPL Summer class", "Meeting on every other sunday at 9am", "blue.wav", date, "7:35");
+//			dbCon.deleteAll();
 			if (dbCon.getSize() > 25) rowNumber = dbCon.getSize();		
 			
 			

@@ -21,7 +21,7 @@ public class Cal extends JPanel{
 		now.set(year, month, 1);
 		day = now.get(Calendar.DAY_OF_WEEK); //return day (Sunday = 1 to Saturday = 7)
 		
-		System.out.printf("Year %d Month %d Date %d Day of week %d", year, month, date, day);
+//		System.out.printf("Year %d Month %d Date %d Day of week %d", year, month, date, day);
 	}
 	
 	
