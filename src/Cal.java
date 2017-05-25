@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JPanel;
@@ -55,7 +56,8 @@ public class Cal extends JPanel{
 		int y = 120, j = 0;
 		
 		g.setFont(new Font("arial", Font.PLAIN, 22));
-		g.drawString(getMonthName(month).getMonthName(), 325, 70);
+		g.drawString(getMonthName(month).getMonthName(), 260, 70);
+		g.drawString(getYear(), 405, 70);
 		g.drawString("SUN", arrX[0], y);
 		g.drawString("MON", arrX[1], y);
 		g.drawString("TUE", arrX[2], y);
@@ -63,6 +65,14 @@ public class Cal extends JPanel{
 		g.drawString("THU", arrX[4], y);
 		g.drawString("FRI", arrX[5], y);
 		g.drawString("SAT", arrX[6], y);
+		int xNextButton[] = {550, 580, 550};
+		int yNextButton[] = {50, 60, 70};
+		int xPreviousButton[] = {40, 70, 70};
+		int yPreviousButton[] = {60, 70, 50};
+		Polygon btnNext = new Polygon(xNextButton, yNextButton, 3);
+		Polygon btnPreview = new Polygon(xPreviousButton, yPreviousButton, 3);
+		g.fillPolygon(btnPreview);
+		g.fillPolygon(btnNext);
 				
 		for (int i = 0; i < mon.size(); i++){			
 			switch (mon.get(i).getDayName()){				
@@ -95,10 +105,15 @@ public class Cal extends JPanel{
 		return npMonth--;
 	}
 	
+	private String getYear(){
+		return String.format("%d", year);
+	}
 	
+	public static String getSelectedDate(){
+		return "2017/05/25";
+	}
 	
-	
-	public enum dayName{
+	private enum dayName{
 		SUN(0, "SUN"), MON(1, "MON"), TUE(2, "TUE"), WED(3, "WED"), THU(4, "THU"), FRI(5, "FRI"), SAT(6, "SAT");
 		
 		int weekIndex; String weekName;
@@ -119,7 +134,7 @@ public class Cal extends JPanel{
 	
 	 
 	
-	public enum monthName{
+	private enum monthName{
 		JANUARY(0, "JANUARY"), FEBRUARY(1, "FEBRUARY"), MARCH(2, "MARCH"), APRIL(3, "APRIL"), 
 		MAY(4, "MAY"), JUNE(5, "JUNE"), JULY(6, "JULY"), AUGUST(8, "AUGUST"), SEPTEMBER(9, "SEPTEMBER"), 
 		OCTOBER(10, "OCTOBER"), NOVEMBER(11, "NOVEMBER"), DECEMBER(12, "DECEMBER");

@@ -69,15 +69,16 @@ public class Alarm extends JPanel{
 	       clearButton.setFont(new Font("Arial", 0, 25));
 	       btnDelete.setFont(new Font("Arial", 0, 25));
 	       btnEdit.setFont(new Font("Arial", 0, 25));
-	       btnDelete.setEnabled(false);
+//	       btnDelete.setEnabled(false);
 	       
 	       
 	       
 	       //delete ActionListener to button
 	       btnDelete.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent event){
-	                              
-	                 
+//	                Cal.getSelectedDate();
+//	                 System.out.printf("this is getSelectedDate %s", Cal.getSelectedDate());
+	            	System.out.printf("this is count: %d\n", Note.getEnable());
 	            }
 	        });
 	       

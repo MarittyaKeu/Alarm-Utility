@@ -29,7 +29,8 @@ public class Note extends JPanel{ // 8-31-2015
    private DefaultTableModel model;
     private String[] columnsName = {"No", "Date", "Time", "Subject", "Body", "Sound", "Delete"};
     private JScrollPane scrollPane;
-    boolean enableBtnDelete = false;
+    private static int count = 0;
+    private boolean enableBtnDelete = false;
     databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
     
     public Note(int row) throws SQLException{
@@ -98,7 +99,7 @@ public class Note extends JPanel{ // 8-31-2015
         		 table.setValueAt(rs.getString("subject"), i, 3);
         		 table.setValueAt(rs.getString("body"), i, 4);
         		 table.setValueAt(rs.getString("sound"), i, 5);
-        		 table.setValueAt(false, 0, 6);
+//        		 table.setValueAt(false, 0, 6);
         		 
         		 i++;
         	 }
@@ -108,7 +109,9 @@ public class Note extends JPanel{ // 8-31-2015
          }     
           add(scrollPane);           
         }//end constructor() 
-      
+   public static boolean getEnable(){
+	   return count > 0;
+   }
     
     //trigger when checkbox is checked in cell
     private class tableModelListener implements TableModelListener{    	
@@ -117,7 +120,9 @@ public class Note extends JPanel{ // 8-31-2015
             int col = event.getColumn();
             if (col == 6) {
                 TableModel model = (TableModel) event.getSource();
-                enableBtnDelete = (Boolean) model.getValueAt(row, col);                
+                enableBtnDelete = (Boolean) model.getValueAt(row, col);  
+                if (enableBtnDelete) count++; else count--;
+
             }
 //            System.out.println(enableBtnDelete);
         }

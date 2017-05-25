@@ -26,7 +26,7 @@ public class Main {
 			dbCon.insert("OPL Summer class", "Meeting on every other sunday at 9am", "blue.wav", date, "7:35");
 //			dbCon.deleteAll();
 			if (dbCon.getSize() > 25) rowNumber = dbCon.getSize();		
-			
+//			System.out.printf("getSize %d", dbCon.getSize());
 			
 		}catch (SQLException ex){
 			ex.printStackTrace();
@@ -34,6 +34,8 @@ public class Main {
 		catch (ValueException ex){
 			System.out.print(ex.getMessage());
 		}
+		
+		
 		
 		Clock clock = new Clock();
 		Cal cal = new Cal();
