@@ -2,6 +2,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JScrollPane;
@@ -25,90 +26,120 @@ import javax.swing.event.TableModelListener;
 
 
 public class Note extends JPanel{ // 8-31-2015
-    private JTable table;
-   private DefaultTableModel model;
+    private static JTable table;
+    private static DefaultTableModel model;
     private String[] columnsName = {"No", "Date", "Time", "Subject", "Body", "Sound", "Delete"};
-    private JScrollPane scrollPane;
+    private static JScrollPane scrollPane;
     private static int count = 0;
     private boolean enableBtnDelete = false;
-    databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
+    private databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
     
     public Note(int row) throws SQLException{
     	super.setLayout(new BorderLayout());
-        model = new DefaultTableModel(columnsName, row);      
+    	 
+  	   model = new DefaultTableModel(columnsName, 25);   
+  	   table = new JTable(model){      	
+             public boolean isCellEditable(int row, int col){
+             	try{
+             		if (row < dbCon.getSize() &&  col == 6) return true;               	 
+             	}catch(SQLException ex){
+             		ex.printStackTrace();
+             	}
+                 return false;          	
+             }        
+             
+             public Class<?> getColumnClass(int column) {
+                 switch (column) {
+                 	case 0: return Integer.class;
+                     case 1: return String.class;
+                     case 2: return String.class;
+                     case 3: return String.class;
+                     case 4: return String.class;
+                     case 5: return String.class;
+                     default: return Boolean.class;
+                 }
+             }         
+             
+         };
+         
+         
+         table.getColumnModel().getColumn(0).setPreferredWidth(35);
+         table.getColumnModel().getColumn(1).setPreferredWidth(150);
+         table.getColumnModel().getColumn(2).setPreferredWidth(120);
+         table.getColumnModel().getColumn(3).setPreferredWidth(250);
+         table.getColumnModel().getColumn(4).setPreferredWidth(450);
+         table.getColumnModel().getColumn(5).setPreferredWidth(150);
+         table.getColumnModel().getColumn(6).setPreferredWidth(50);
+         
+//         table.addMouseListener(new mouseAdapter());
+         table.getModel().addTableModelListener(new tableModelListener());
+         
         
-        
-        table = new JTable(model){      	
-            public boolean isCellEditable(int row, int col){
-            	try{
-            		if (row < dbCon.getSize() &&  col == 6) return true;               	 
-            	}catch(SQLException ex){
-            		ex.printStackTrace();
-            	}
-                return false;          	
-            }        
-            
-            public Class<?> getColumnClass(int column) {
-                switch (column) {
-                	case 0: return Integer.class;
-                    case 1: return String.class;
-                    case 2: return String.class;
-                    case 3: return String.class;
-                    case 4: return String.class;
-                    case 5: return String.class;
-                    default: return Boolean.class;
-                }
-            }         
-            
-        };
-        
-        
-        table.getColumnModel().getColumn(0).setPreferredWidth(35);
-        table.getColumnModel().getColumn(1).setPreferredWidth(150);
-        table.getColumnModel().getColumn(2).setPreferredWidth(120);
-        table.getColumnModel().getColumn(3).setPreferredWidth(250);
-        table.getColumnModel().getColumn(4).setPreferredWidth(450);
-        table.getColumnModel().getColumn(5).setPreferredWidth(150);
-        table.getColumnModel().getColumn(6).setPreferredWidth(50);
-        
-//        table.addMouseListener(new mouseAdapter());
-        table.getModel().addTableModelListener(new tableModelListener());
-        
+         
+         
+         table.setRowHeight(35);
+         //table.setLayout(new BorderLayout());
+         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 27));
        
-  
-        
-        table.setRowHeight(35);
-        //table.setLayout(new BorderLayout());
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 27));
-      
-        //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-         table.setFont(new Font("Arial", Font.PLAIN, 28));      
-        
-         scrollPane = new JScrollPane(table);
-         scrollPane.setPreferredSize(new Dimension(1400, 600));
+         //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+          table.setFont(new Font("Arial", Font.PLAIN, 28));  
+          
+          scrollPane = new JScrollPane(table);
+          scrollPane.setPreferredSize(new Dimension(1400, 600));
+          loadTable();
          
-         
-         try{
-        	 
-        	 ResultSet rs = dbCon.getResultSet();
-        	 int i = 0;
-        	 while (rs.next()){
-        		 table.setValueAt(rs.getString("ID"), i, 0);
-        		 table.setValueAt(rs.getString("date"), i, 1);
-        		 table.setValueAt(rs.getString("time"), i, 2);
-        		 table.setValueAt(rs.getString("subject"), i, 3);
-        		 table.setValueAt(rs.getString("body"), i, 4);
-        		 table.setValueAt(rs.getString("sound"), i, 5);
-//        		 table.setValueAt(false, 0, 6);
-        		 
-        		 i++;
-        	 }
-        	 
-         }catch (SQLException ex){
-        	 System.out.print(ex.getMessage());
-         }     
-          add(scrollPane);           
+                             
+        add(scrollPane);            
         }//end constructor() 
+    
+    
+   public  void loadTable(){
+	   try{  	 
+//		 model.setRowCount(0);
+		 int row = dbCon.getSize();  
+		 if (row > 25) model.setRowCount(row);
+		 		 
+      	 ResultSet rs = dbCon.getResultSet();
+      	 int i = 0;
+      	 while (rs.next()){
+//      		 model.removeRow(i);
+      		 table.setValueAt(rs.getString("ID"), i, 0);
+      		 table.setValueAt(rs.getString("date"), i, 1);
+      		 table.setValueAt(rs.getString("time"), i, 2);
+      		 table.setValueAt(rs.getString("subject"), i, 3);
+      		 table.setValueAt(rs.getString("body"), i, 4);
+      		 table.setValueAt(rs.getString("sound"), i, 5);
+//      		 table.setValueAt(false, 0, 6);	 
+      		 i++;
+      	 }
+      	 
+       }catch (SQLException ex){
+      	 System.out.print(ex.getMessage());
+       }
+	   //model.removeRow(0);
+//	   System.out.print("you are in");
+	
+   }
+   
+   
+   
+   
+   public static void cleanTable(){
+	   
+	   
+	   for (int i = 0; i < model.getRowCount(); i++){
+		   table.setValueAt("0", i, 0);
+		   table.setValueAt("0", i, 1);
+		   table.setValueAt("0", i, 2);
+		   table.setValueAt("0", i, 3);
+		   table.setValueAt("0", i, 4);
+		   table.setValueAt("0", i, 5);	
+//		   System.out.println("clear table");
+	   }
+//	   model.fireTableDataChanged();
+
+}
+    
    public static boolean getEnable(){
 	   return count > 0;
    }

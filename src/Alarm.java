@@ -11,11 +11,18 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Date;
 
-public class Alarm extends JPanel{
-	public Alarm(){
+public class Alarm extends JPanel {
+	databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
+//	Note note = new Note(25);
+//	Note note2;
+	public Alarm() throws SQLException{
+		
 		 super.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	       
+		 
+		 
 	       //labels to hold time/subject/Body
 	       JLabel lblTime, lblSub, lblBody;
 	       lblTime = new JLabel("Time:     ");
@@ -71,14 +78,26 @@ public class Alarm extends JPanel{
 	       btnEdit.setFont(new Font("Arial", 0, 25));
 //	       btnDelete.setEnabled(false);
 	       
-	       
+	       Date date = new Date();
 	       
 	       //delete ActionListener to button
 	       btnDelete.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent event){
 //	                Cal.getSelectedDate();
 //	                 System.out.printf("this is getSelectedDate %s", Cal.getSelectedDate());
-	            	System.out.printf("this is count: %d\n", Note.getEnable());
+	            	//System.out.printf("this is count: %d\n", Note.getEnable());
+	            	
+	            	try{
+	            		dbCon.insert("testing subject", "testing body", "test.wav", date, "08:30");
+	            	}catch (ValueException ex){
+	            		System.out.print(ex.getMessage());
+	            	}catch (SQLException ex){
+	            		System.out.print(ex.getMessage());
+	            	}
+	            	
+//	            	note.loadTable();
+	            	Note.cleanTable();
+	            	
 	            }
 	        });
 	       

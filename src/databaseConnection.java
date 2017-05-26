@@ -55,8 +55,12 @@ public class databaseConnection {
 	//     catch(ValueException ex){ //if we don't handle ValueException here, it will passed to its parent, and it parent and it parent ...
 	//    	 ex.printStackTrace();
 	//     }
-	       
-	  	 return sqlPrepare.executeUpdate(); //0 for fail, 1 for success
+	    int result = sqlPrepare.executeUpdate();
+	    
+	       if ( result == 0 ) 
+	    	   throw new SQLException("Fail to insert value, please try again");
+	       else 
+	    	   return result; //0 for fail, 1 for success
 	}
     
     public int getSize()throws SQLException{

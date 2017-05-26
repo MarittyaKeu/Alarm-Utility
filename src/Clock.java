@@ -3,6 +3,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -86,7 +87,9 @@ public class Clock extends JPanel{
 		
 		g.drawLine(250, 250, (int)sx, (int)sy);
 		g.drawLine(250, 250, (int)mx, (int)my);
+		g.setColor(Color.RED);
 		g.drawLine(250, 250, (int)hx, (int)hy);
+		g.setColor(Color.BLACK);
 		g.drawString("12", 233, 75);
 		g.drawString("1", 330, 105);
 		g.drawString("2", 400, 170);
