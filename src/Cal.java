@@ -55,9 +55,10 @@ public class Cal extends JPanel{
 		int arrX[] = {50, 150, 250, 350, 450, 550, 650};
 		int y = 120, j = 0;
 		
-		g.setFont(new Font("arial", Font.PLAIN, 22));
+		g.setFont(new Font("arial", Font.BOLD, 30));
 		g.drawString(getMonthName(month).getMonthName(), 260, 70);
 		g.drawString(getYear(), 405, 70);
+		g.setFont(new Font("arial", Font.BOLD, 22));
 		g.drawString("SUN", arrX[0], y);
 		g.drawString("MON", arrX[1], y);
 		g.drawString("TUE", arrX[2], y);
@@ -65,9 +66,9 @@ public class Cal extends JPanel{
 		g.drawString("THU", arrX[4], y);
 		g.drawString("FRI", arrX[5], y);
 		g.drawString("SAT", arrX[6], y);
-		int xNextButton[] = {550, 580, 550};
+		int xNextButton[] = {660, 690, 660};
 		int yNextButton[] = {50, 60, 70};
-		int xPreviousButton[] = {40, 70, 70};
+		int xPreviousButton[] = {50, 80, 80};
 		int yPreviousButton[] = {60, 70, 50};
 		Polygon btnNext = new Polygon(xNextButton, yNextButton, 3);
 		Polygon btnPreview = new Polygon(xPreviousButton, yPreviousButton, 3);
