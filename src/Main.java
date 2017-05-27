@@ -39,7 +39,7 @@ public class Main {
 		
 		Clock clock = new Clock();
 		Cal cal = new Cal();
-		Note note = new Note(rowNumber);
+		Note note = new Note();
 		Alarm alarm = new Alarm();
 		
 		JPanel container1 = new JPanel();
@@ -52,17 +52,19 @@ public class Main {
 		container1.add(clock);
 		container1.add(cal);
 		
-		container1.add(alarm);
-		container2.add(note);
+//		container2.add(alarm);
+//		container2.add(note);
 
 		
 		tdContainer.setLayout(new BoxLayout(tdContainer, BoxLayout.Y_AXIS));
 		tdContainer.add(container1);
-		tdContainer.add(container2);
+		tdContainer.add(alarm);
 		
 		
 		frame.add(tdContainer);
 		
+		
+		//System.out.printf("this is note parent %s\n", note.getParent().getComponents().toString());
 		//frame.add(cal);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(dim);

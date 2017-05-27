@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 public class Alarm extends JPanel {
 	databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
@@ -79,27 +80,37 @@ public class Alarm extends JPanel {
 //	       btnDelete.setEnabled(false);
 	       
 	       Date date = new Date();
-	       
+	       Note note = new Note();
 	       //delete ActionListener to button
 	       btnDelete.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent event){
-//	                Cal.getSelectedDate();
-//	                 System.out.printf("this is getSelectedDate %s", Cal.getSelectedDate());
-	            	//System.out.printf("this is count: %d\n", Note.getEnable());
-	            	
-	            	try{
+
+	            	if (!note.getSelectRow()){   	
+	            		JOptionPane.showMessageDialog(note, "Please select any note to delete");
+	            	}else{	            		
+	            		try{
+	            			dbCon.deleteSQL(note.getID());
+	            			note.loadTable();
+	            		}catch (SQLException ex){
+	            			System.out.print(ex.getMessage());
+	            		}	
+	            	}
+	            }
+	        });
+	       
+	       
+	       addButton.addActionListener(new ActionListener(){
+	    	   public void actionPerformed(ActionEvent event){
+	    		   try{
 	            		dbCon.insert("testing subject", "testing body", "test.wav", date, "08:30");
 	            	}catch (ValueException ex){
 	            		System.out.print(ex.getMessage());
 	            	}catch (SQLException ex){
 	            		System.out.print(ex.getMessage());
 	            	}
-	            	
-//	            	note.loadTable();
-	            	Note.cleanTable();
-	            	
-	            }
-	        });
+	            	note.loadTable();
+	    	   }
+	       });
 	       
 	       
 	       
@@ -143,6 +154,18 @@ public class Alarm extends JPanel {
 	       mainContainer.add(container3);
 	       mainContainer.add(buttonContainer);
 	       
+	       
+//	       JPanel combineContainer = new JPanel();
+//	       combineContainer.setLayout(new BoxLayout(combineContainer, BoxLayout.X_AXIS));
+	       this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 	       this.add(mainContainer);
+	       this.add(note);
 	}
 }
+
+
+
+
+
+
+

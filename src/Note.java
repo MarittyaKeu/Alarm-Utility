@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.DefaultTableModel;
-
+import java.util.ArrayList;
 //import Main.CheckBoxModelListener;
 
 import javax.swing.JPanel;
@@ -33,10 +33,12 @@ public class Note extends JPanel{ // 8-31-2015
     private static int count = 0;
     private boolean enableBtnDelete = false;
     private databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
+    private ArrayList<String> id = new ArrayList<>();
     
-    public Note(int row) throws SQLException{
+    
+    public Note() throws SQLException{
     	super.setLayout(new BorderLayout());
-    	 
+    	
   	   model = new DefaultTableModel(columnsName, 25);   
   	   table = new JTable(model){      	
              public boolean isCellEditable(int row, int col){
@@ -94,54 +96,76 @@ public class Note extends JPanel{ // 8-31-2015
     
     
    public  void loadTable(){
+	   
 	   try{  	 
-//		 model.setRowCount(0);
+		 model.setRowCount(25);
 		 int row = dbCon.getSize();  
 		 if (row > 25) model.setRowCount(row);
-		 		 
+		 System.out.printf("row count %d", row);
       	 ResultSet rs = dbCon.getResultSet();
       	 int i = 0;
       	 while (rs.next()){
-//      		 model.removeRow(i);
       		 table.setValueAt(rs.getString("ID"), i, 0);
       		 table.setValueAt(rs.getString("date"), i, 1);
       		 table.setValueAt(rs.getString("time"), i, 2);
       		 table.setValueAt(rs.getString("subject"), i, 3);
       		 table.setValueAt(rs.getString("body"), i, 4);
       		 table.setValueAt(rs.getString("sound"), i, 5);
-//      		 table.setValueAt(false, 0, 6);	 
+      		 table.setValueAt(false, i, 6);	 
       		 i++;
       	 }
       	 
+      	 for (int j = i; j < model.getRowCount(); j++){
+      		table.setValueAt("", j, 0);
+      		table.setValueAt("", j, 1);
+      		table.setValueAt("", j, 2);
+      		table.setValueAt("", j, 3);
+      		table.setValueAt("", j, 4);
+      		table.setValueAt("", j, 5);
+      		table.setValueAt(false, j, 6);	 
+      	 }
+      	 count = 0;
+      	 System.out.printf("getrowcount() %d,", model.getRowCount());
        }catch (SQLException ex){
       	 System.out.print(ex.getMessage());
        }
-	   //model.removeRow(0);
-//	   System.out.print("you are in");
 	
    }
    
    
    
    
-   public static void cleanTable(){
-	   
-	   
-	   for (int i = 0; i < model.getRowCount(); i++){
-		   table.setValueAt("0", i, 0);
-		   table.setValueAt("0", i, 1);
-		   table.setValueAt("0", i, 2);
-		   table.setValueAt("0", i, 3);
-		   table.setValueAt("0", i, 4);
-		   table.setValueAt("0", i, 5);	
-//		   System.out.println("clear table");
-	   }
-//	   model.fireTableDataChanged();
-
-}
+//   public void deleteNote(){
+//	   try{
+//		   int row = dbCon.getSize();
+//		   if (row > 25) model.setRowCount(row);
+//		   for (int i = 0; i < model.getRowCount(); i++){
+//			   table.setValueAt("0", i, 0);
+//			   table.setValueAt("0", i, 1);
+//			   table.setValueAt("0", i, 2);
+//			   table.setValueAt("0", i, 3);
+//			   table.setValueAt("0", i, 4);
+//			   table.setValueAt("0", i, 5);	
+//		   }
+//		   		addNote();
+//		   
+//	   }catch (SQLException ex){
+//		   ex.printStackTrace();
+//	   }
+//	   
+//
+//}
     
-   public static boolean getEnable(){
+   public boolean getSelectRow(){
 	   return count > 0;
+   }
+   
+   public String[] getID(){
+	   String[] ids = new String[id.size()];
+	   for (int i = 0; i < id.size(); i++){
+		   ids[i] = (String)id.get(i);
+	   }
+	  return ids;
    }
     
     //trigger when checkbox is checked in cell
@@ -152,7 +176,14 @@ public class Note extends JPanel{ // 8-31-2015
             if (col == 6) {
                 TableModel model = (TableModel) event.getSource();
                 enableBtnDelete = (Boolean) model.getValueAt(row, col);  
-                if (enableBtnDelete) count++; else count--;
+                if (enableBtnDelete){
+                	count++; 
+                	
+                	id.add((String)model.getValueAt(row, 0));
+                }else{
+                	count--;
+                	//do the deletion here
+                }
 
             }
 //            System.out.println(enableBtnDelete);

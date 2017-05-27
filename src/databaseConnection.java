@@ -83,7 +83,7 @@ public class databaseConnection {
     	 
     }
     
-    public int delete(String id[])throws SQLException{
+    public int deleteSQL(String id[])throws SQLException{
     	String sqlDelete = "DELETE FROM tblAlarm WHERE id IN (";
     	for (int i = 0; i < id.length; i++){
     		if (i == (id.length - 1)) 
