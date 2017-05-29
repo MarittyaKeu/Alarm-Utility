@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -120,6 +121,21 @@ public class Alarm extends JPanel {
 	       });
 	       
 	       
+
+	       btnEdit.addActionListener(new ActionListener(){
+	    	   public void actionPerformed(ActionEvent event){
+	    		   try{
+	    			   String edit = note.getEdit();
+	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
+	    			   rss.next();
+	    			   System.out.print(rs.getString("subject"));
+	    		   }catch (SQLException ex){
+	    			   ex.printStackTrace();
+	    		   }
+	    		  
+	    	   }
+	    		   
+	       });
 	       
 	       
 	       
