@@ -15,7 +15,7 @@ public class databaseConnection {
 	 private final String userName;
 	 private final String passWord; 
 	 private final String sqlDropTable = "DROP TABLE tblAlarm";
-	 private final String sqlSelect = "SELECT * FROM tblAlarm";
+	 private final String sqlSelect = "SELECT * FROM tblAlarm ORDER BY date, time ASC";
 //	 private final String sqlInsert = "INSERT INTO TBLALARM (subject, body, sound, Date, Time) VALUES ('Assignment 1', 'get it done by Saturday', 'bluesky.wav', '2017-05-10', '12:30:00')";
 	 private final String sqlCreateTable = "CREATE TABLE tblAlarm ( id INT NOT NULL GENERATED ALWAYS AS IDENTITY, subject varchar(255) NOT NULL, body varchar(255), sound varchar(100) NOT NULL, Date date,Time time, primary key (id))";
 	 private Statement stmt;
