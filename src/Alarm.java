@@ -78,23 +78,26 @@ public class Alarm extends JPanel {
 	       group.add(pmButton);
 	       
 	       //add and clear buttons
-	       JButton addButton, clearButton, btnDelete, btnEdit;
+	       JButton addButton, clearButton, deleteButton, editButton, updateButton;
 	       addButton = new JButton("Add");
 	       clearButton = new JButton("Clear");
-	       btnDelete = new JButton("Delete");
-	       btnEdit = new JButton("Edit");
+	       deleteButton = new JButton("Delete");
+	       editButton = new JButton("Edit");
+	       updateButton = new JButton("Update");
+	       updateButton.setEnabled(false);
 	       
-	       
+	       //set fonts of button
 	       addButton.setFont(new Font("Arial", 0, 25));
 	       clearButton.setFont(new Font("Arial", 0, 25));
-	       btnDelete.setFont(new Font("Arial", 0, 25));
-	       btnEdit.setFont(new Font("Arial", 0, 25));
+	       deleteButton.setFont(new Font("Arial", 0, 25));
+	       editButton.setFont(new Font("Arial", 0, 25));
+	       updateButton.setFont(new Font("Arial", 0, 25));
 	       
 	       Date date = new Date();
 	       Note note = new Note();
 	       
 	       //delete ActionListener to button
-	       btnDelete.addActionListener(new ActionListener(){
+	       deleteButton.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent event){
 
 	            	if (!note.getSelectRow()){   	
@@ -125,7 +128,8 @@ public class Alarm extends JPanel {
 			    			   }
 			    			    int newHField = Integer.parseInt(hField.getText()) + adjustedTime; 
 			    			    String finalHField = Integer.toString(newHField);
-			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), "test.wav", date, finalHField + ":" + mField.getText());
+			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), "test.wav", date, 
+			            				finalHField + ":" + mField.getText());
 			            		
 			            	}catch (ValueException ex){
 			            		System.out.print(ex.getMessage());
@@ -147,22 +151,25 @@ public class Alarm extends JPanel {
 	    	   public void actionPerformed(ActionEvent event) {
 	    		   if(event.getSource() == clearButton) {
 	    			   hField.setText("");
-		    	        mField.setText("");
-		    			subField.setText("");
-		    			bodyTextArea.setText("");
-	    		   }
-	    	   }
+		    	       mField.setText("");
+		    		   subField.setText("");
+		    		   bodyTextArea.setText("");
+	    		      }
+	    	    }
 	       });
 	       
-	       
+	      
 
-	       btnEdit.addActionListener(new ActionListener(){
+	       editButton.addActionListener(new ActionListener(){
 	    	   public void actionPerformed(ActionEvent event){
 	    		   try{
 	    			   String edit = note.getEdit();
 	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
-	    			   rss.next();
-	    			   System.out.print(rs.getString("subject"));
+	    			   rs.next();
+	    			   mField.setText((String) rs.getString("time").subSequence(3, 5));
+	    			   hField.setText((String) rs.getString("time").subSequence(0, 2));
+	    			   subField.setText(rs.getString("subject"));
+	    			   bodyTextArea.setText(rs.getString("body"));
 	    		   }catch (SQLException ex){
 	    			   ex.printStackTrace();
 	    		   }
@@ -208,8 +215,9 @@ public class Alarm extends JPanel {
 	       JPanel buttonContainer = new JPanel();
 	       buttonContainer.add(addButton);
 	       buttonContainer.add(clearButton);
-	       buttonContainer.add(btnDelete);
-	       buttonContainer.add(btnEdit);
+	       buttonContainer.add(deleteButton);
+	       buttonContainer.add(editButton);
+	       buttonContainer.add(updateButton);
 	       
 	       mainContainer.add(container1);
 	       mainContainer.add(container2);
