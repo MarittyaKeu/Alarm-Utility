@@ -101,14 +101,21 @@ public class Alarm extends JPanel {
 	       
 	       addButton.addActionListener(new ActionListener(){
 	    	   public void actionPerformed(ActionEvent event){
-	    		   try{
-	            		dbCon.insert("testing subject", "testing body", "test.wav", date, "08:30");
-	            	}catch (ValueException ex){
-	            		System.out.print(ex.getMessage());
-	            	}catch (SQLException ex){
-	            		System.out.print(ex.getMessage());
-	            	}
-	            	note.loadTable();
+	    		   FormatCheck checker = new FormatCheck();
+    			   if(checker.checkSubLength(subField.getText()) == false ||
+    					   checker.checkTime(hField.getText(), mField.getText()) == false){
+    				   JOptionPane.showMessageDialog(note, "Error: Make sure fields has valid inputs.");
+	    			   }else {
+			    		   try{
+			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), "test.wav", date, hField.getText() + ":" + mField.getText());
+			            		
+			            	}catch (ValueException ex){
+			            		System.out.print(ex.getMessage());
+			            	}catch (SQLException ex){
+			            		System.out.print(ex.getMessage());
+			            	}
+			            	note.loadTable();
+	    			   }
 	    	   }
 	       });
 	       
