@@ -163,6 +163,7 @@ public class Alarm extends JPanel {
 	       editButton.addActionListener(new ActionListener(){
 	    	   public void actionPerformed(ActionEvent event){
 	    		   try{
+<<<<<<< HEAD
 	    			   String edit = note.getEdit();
 	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
 	    			   rs.next();
@@ -170,6 +171,16 @@ public class Alarm extends JPanel {
 	    			   hField.setText((String) rs.getString("time").subSequence(0, 2));
 	    			   subField.setText(rs.getString("subject"));
 	    			   bodyTextArea.setText(rs.getString("body"));
+=======
+//	    			   String edit = note.getEdit();
+//	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
+//	    			   rs.next();
+//	    			   System.out.print(rs.getString("subject"));
+	    			   
+	    			   dbCon.updateNote("Allen", "Updated", "upate.wav", date, "9:30", "1602");
+	    			   
+	    			   
+>>>>>>> c1913f7fdf332cc0df83587a6e4e897dec01eb99
 	    		   }catch (SQLException ex){
 	    			   ex.printStackTrace();
 	    		   }

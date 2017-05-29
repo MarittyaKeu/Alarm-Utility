@@ -76,6 +76,24 @@ public class databaseConnection {
     		
     }
     
+    public int updateNote(String subject, String body, String sound, Date date, String time, String id)throws SQLException{
+    	sqlPrepare = dbCon.prepareStatement("UPDATE tblAlarm SET subject = ?, body = ?, sound = ? , Date = ?, time = ? WHERE id = ?");
+    	sqlPrepare.setString(1, subject);
+ 	   	sqlPrepare.setString(2, body);
+ 	   	sqlPrepare.setString(3, sound);
+ 	   	sqlPrepare.setDate(4, new java.sql.Date(date.getTime())); //java.util.data is not the same as java.sql.date
+ 	   	sqlPrepare.setString(5, time);
+ 	   	sqlPrepare.setString(6, id);
+    	
+ 	   int result = sqlPrepare.executeUpdate();
+	    
+       if ( result == 0 ) 
+    	   throw new SQLException("Fail to insert value, please try again");
+       else 
+    	   return result; //0 for fail, 1 for success
+
+        
+    }
     
     public ResultSet getResultSetOn(String date)throws SQLException{
     	String sqlGetOn = "SELECT * FROM tblAlarm WHERE Date = '" + date + "'";
