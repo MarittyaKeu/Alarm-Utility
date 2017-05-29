@@ -4,6 +4,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
 import javax.swing.BoxLayout;
@@ -14,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import java.awt.Dimension;
+
 
 public class Alarm extends JPanel {
 	databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
@@ -45,21 +48,29 @@ public class Alarm extends JPanel {
 	       mField.setFont(new Font("Arial", 0, 25));
 	       subField.setFont(new Font("Arial", 0, 25));
 	       
-	       hField.setSize(100, 500);
+	      // hField.setSize(100, 500);
 	       
 	       
 	       //JTextArea for writing message for purpose of alarm
 	       JTextArea bodyTextArea;
 	       bodyTextArea = new JTextArea();
 	       bodyTextArea.setSize(100, 100);
+	       bodyTextArea.setFont(new Font("Arial", 0, 25));
+	       bodyTextArea.setLineWrap(true);
+	       bodyTextArea.setWrapStyleWord(true);
+	      // bodyTextArea.setColumns(5);
+	       //bodyTextArea.setRows(4);
+	       
 	       
 	       //Radio button for holding am/pm option
 	       JRadioButton amButton, pmButton;
 	       amButton = new JRadioButton("AM");
 	       pmButton = new JRadioButton("PM");
 	       
+	       
 	       amButton.setFont(new Font("Arial", 0, 25));
 	       pmButton.setFont(new Font("Arial", 0, 25));
+	       amButton.setSelected(true);
 	       
 	       ButtonGroup group = new ButtonGroup();
 	       group.add(amButton);
@@ -77,10 +88,10 @@ public class Alarm extends JPanel {
 	       clearButton.setFont(new Font("Arial", 0, 25));
 	       btnDelete.setFont(new Font("Arial", 0, 25));
 	       btnEdit.setFont(new Font("Arial", 0, 25));
-//	       btnDelete.setEnabled(false);
 	       
 	       Date date = new Date();
 	       Note note = new Note();
+	       
 	       //delete ActionListener to button
 	       btnDelete.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent event){
@@ -98,7 +109,7 @@ public class Alarm extends JPanel {
 	            }
 	        });
 	       
-	       
+	       //add button action listener
 	       addButton.addActionListener(new ActionListener(){
 	    	   public void actionPerformed(ActionEvent event){
 	    		   FormatCheck checker = new FormatCheck();
@@ -107,7 +118,13 @@ public class Alarm extends JPanel {
     				   JOptionPane.showMessageDialog(note, "Error: Make sure fields has valid inputs.");
 	    			   }else {
 			    		   try{
-			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), "test.wav", date, hField.getText() + ":" + mField.getText());
+			    			   int adjustedTime = 0;
+			    			   if(pmButton.isSelected()) {
+			    				   adjustedTime = 12;
+			    			   }
+			    			    int newHField = Integer.parseInt(hField.getText()) + adjustedTime; 
+			    			    String finalHField = Integer.toString(newHField);
+			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), "test.wav", date, finalHField + ":" + mField.getText());
 			            		
 			            	}catch (ValueException ex){
 			            		System.out.print(ex.getMessage());
@@ -115,7 +132,24 @@ public class Alarm extends JPanel {
 			            		System.out.print(ex.getMessage());
 			            	}
 			            	note.loadTable();
+			             	hField.setText("");
+			    	        mField.setText("");
+			    			subField.setText("");
+			    			bodyTextArea.setText("");
 	    			   }
+	    	   }
+	    	   
+	       });
+	       
+	       //clear button action listener
+	       clearButton.addActionListener(new ActionListener() {
+	    	   public void actionPerformed(ActionEvent event) {
+	    		   if(event.getSource() == clearButton) {
+	    			   hField.setText("");
+		    	        mField.setText("");
+		    			subField.setText("");
+		    			bodyTextArea.setText("");
+	    		   }
 	    	   }
 	       });
 	       
@@ -127,21 +161,26 @@ public class Alarm extends JPanel {
 	       //time container that gets added to main 
 	       JPanel container1 = new JPanel();
 	       container1.setLayout(new BoxLayout(container1, BoxLayout.X_AXIS));
+	       container1.setMaximumSize(new Dimension(500, 100));
 	       container1.add(lblTime);
 	       container1.add(hField);
 	       container1.add(mField);
 	       container1.add(amButton);
 	       container1.add(pmButton);
 	       
+	       
 	       //subject container that gets added to main
 	       JPanel container2 = new JPanel();
 	       container2.setLayout(new BoxLayout(container2, BoxLayout.X_AXIS));
+	       container2.setMaximumSize(new Dimension(1000, 500));
 	       container2.add(lblSub);
 	       container2.add(subField);
+	       
 	       
 	       //body container that gets added to main
 	       JPanel container3 = new JPanel();
 	       container3.setLayout(new BoxLayout(container3, BoxLayout.X_AXIS));
+	       container3.setMaximumSize(new Dimension(1000, 5000));
 	       container3.add(lblBody);
 	       container3.add(bodyTextArea);
 	       
