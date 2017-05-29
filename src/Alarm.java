@@ -6,6 +6,7 @@ import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.ButtonGroup;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
@@ -29,7 +30,7 @@ public class Alarm extends JPanel {
 		 
 		 
 	       //labels to hold time/subject/Body
-	       JLabel lblTime, lblSub, lblBody;
+	       JLabel lblTime, lblSub, lblBody, lblSound;
 	       lblTime = new JLabel("Time:     ");
 	       lblTime.setFont(new Font("Arial", 0, 25));
 	       
@@ -38,6 +39,9 @@ public class Alarm extends JPanel {
 	       
 	       lblBody = new JLabel("Body:     ");
 	       lblBody.setFont(new Font("Arial", 0, 25));
+	       
+	       lblSound = new JLabel("Sound:   ");
+	       lblSound.setFont(new Font("Arial", 0, 25));
 	       
 	       //Text fields for setting time for alarm
 	       JTextField hField, mField, subField;
@@ -59,9 +63,8 @@ public class Alarm extends JPanel {
 	       bodyTextArea.setFont(new Font("Arial", 0, 25));
 	       bodyTextArea.setLineWrap(true);
 	       bodyTextArea.setWrapStyleWord(true);
-	      // bodyTextArea.setColumns(5);
-	       //bodyTextArea.setRows(4);
 	       
+	       JScrollPane scroll = new JScrollPane(bodyTextArea);
 	       
 	       //Radio button for holding am/pm option
 	       JRadioButton amButton, pmButton;
@@ -96,6 +99,12 @@ public class Alarm extends JPanel {
 	       Date date = new Date();
 	       Note note = new Note();
 	       
+	       String[] soundList = {"update.wav", "test.wav", "blue.wav"};
+	       JComboBox soundMenu = new JComboBox(soundList);
+	       soundMenu.setSelectedIndex(2);
+	       soundMenu.setFont(new Font("Arial", 0, 25));
+	       soundMenu.setMaximumSize(new Dimension(300,300));
+	       
 	       //delete ActionListener to button
 	       deleteButton.addActionListener(new ActionListener(){
 	            public void actionPerformed(ActionEvent event){
@@ -123,12 +132,12 @@ public class Alarm extends JPanel {
 	    			   }else {
 			    		   try{
 			    			   int adjustedTime = 0;
-			    			   if(pmButton.isSelected()) {
+			    			   if(pmButton.isSelected() && Integer.parseInt(hField.getText()) < 12) {
 			    				   adjustedTime = 12;
 			    			   }
 			    			    int newHField = Integer.parseInt(hField.getText()) + adjustedTime; 
 			    			    String finalHField = Integer.toString(newHField);
-			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), "test.wav", date, 
+			            		dbCon.insert(subField.getText(), bodyTextArea.getText(), (String)soundMenu.getSelectedItem(), date, 
 			            				finalHField + ":" + mField.getText());
 			            		
 			            	}catch (ValueException ex){
@@ -158,29 +167,55 @@ public class Alarm extends JPanel {
 	    	    }
 	       });
 	       
-	      
+	       updateButton.addActionListener(new ActionListener(){
+	    	   public void actionPerformed(ActionEvent event){
+	    		   FormatCheck checker = new FormatCheck();
+    			   if(checker.checkSubLength(subField.getText()) == false ||
+    					   checker.checkTime(hField.getText(), mField.getText()) == false){
+    				   JOptionPane.showMessageDialog(note, "Error: Make sure fields has valid inputs.");
+    			   }else{
+		    		   try {
+		    			   int adjustedTime = 0;
+		    			   if(pmButton.isSelected() && Integer.parseInt(hField.getText()) < 12) {
+		    				   adjustedTime = 12;
+		    			   }
+		    			    int newHField = Integer.parseInt(hField.getText()) + adjustedTime; 
+		    			    String finalHField = Integer.toString(newHField);
+		    			  
+		    			    dbCon.updateNote(subField.getText(), bodyTextArea.getText(), (String)soundMenu.getSelectedItem(), date, finalHField
+		    					   + ":" + mField.getText(), note.getEdit());
+		    		   }catch (SQLException ex) {
+		    			   	ex.printStackTrace();
+		    	   		}
+	    		   }
+	    		note.loadTable();
+	    		hField.setText("");
+	    	    mField.setText("");
+	    		subField.setText("");
+	    		bodyTextArea.setText("");
+	    		updateButton.setEnabled(false);
+	    	   }
+	       });
 
 	       editButton.addActionListener(new ActionListener(){
 	    	   public void actionPerformed(ActionEvent event){
 	    		   try{
-<<<<<<< HEAD
+
 	    			   String edit = note.getEdit();
 	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
+	    			   String hour, minute;
+	    			   
 	    			   rs.next();
 	    			   mField.setText((String) rs.getString("time").subSequence(3, 5));
 	    			   hField.setText((String) rs.getString("time").subSequence(0, 2));
 	    			   subField.setText(rs.getString("subject"));
 	    			   bodyTextArea.setText(rs.getString("body"));
-=======
-//	    			   String edit = note.getEdit();
-//	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
-//	    			   rs.next();
-//	    			   System.out.print(rs.getString("subject"));
-	    			   
-	    			   dbCon.updateNote("Allen", "Updated", "upate.wav", date, "9:30", "1602");
+
+	    			   //dbCon.updateNote("Allen", "Updated", "upate.wav", date, "9:30", "1602");
+	    			   updateButton.setEnabled(true);
 	    			   
 	    			   
->>>>>>> c1913f7fdf332cc0df83587a6e4e897dec01eb99
+
 	    		   }catch (SQLException ex){
 	    			   ex.printStackTrace();
 	    		   }
@@ -195,7 +230,7 @@ public class Alarm extends JPanel {
 	       //time container that gets added to main 
 	       JPanel container1 = new JPanel();
 	       container1.setLayout(new BoxLayout(container1, BoxLayout.X_AXIS));
-	       container1.setMaximumSize(new Dimension(500, 100));
+	       container1.setMaximumSize(new Dimension(800, 100));
 	       container1.add(lblTime);
 	       container1.add(hField);
 	       container1.add(mField);
@@ -206,17 +241,24 @@ public class Alarm extends JPanel {
 	       //subject container that gets added to main
 	       JPanel container2 = new JPanel();
 	       container2.setLayout(new BoxLayout(container2, BoxLayout.X_AXIS));
-	       container2.setMaximumSize(new Dimension(1000, 500));
+	       container2.setMaximumSize(new Dimension(800, 500));
 	       container2.add(lblSub);
 	       container2.add(subField);
+	       
+	       JPanel soundContainer = new JPanel();
+	       soundContainer.setLayout(new BoxLayout(soundContainer, BoxLayout.X_AXIS));
+	       soundContainer.setMaximumSize(new Dimension(300, 1000));
+	       soundContainer.setAlignmentX(RIGHT_ALIGNMENT);
+	       soundContainer.add(lblSound);
+	       soundContainer.add(soundMenu);
 	       
 	       
 	       //body container that gets added to main
 	       JPanel container3 = new JPanel();
 	       container3.setLayout(new BoxLayout(container3, BoxLayout.X_AXIS));
-	       container3.setMaximumSize(new Dimension(1000, 5000));
+	       container3.setMaximumSize(new Dimension(800, 5000));
 	       container3.add(lblBody);
-	       container3.add(bodyTextArea);
+	       container3.add(scroll);
 	       
 	       //main container
 	       JPanel mainContainer = new JPanel();
@@ -230,10 +272,13 @@ public class Alarm extends JPanel {
 	       buttonContainer.add(editButton);
 	       buttonContainer.add(updateButton);
 	       
+	       mainContainer.setAlignmentX(RIGHT_ALIGNMENT);
 	       mainContainer.add(container1);
 	       mainContainer.add(container2);
+	       mainContainer.add(soundContainer);
 	       mainContainer.add(container3);
 	       mainContainer.add(buttonContainer);
+	       
 	       
 	       
 //	       JPanel combineContainer = new JPanel();
