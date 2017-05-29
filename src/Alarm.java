@@ -125,10 +125,14 @@ public class Alarm extends JPanel {
 	       btnEdit.addActionListener(new ActionListener(){
 	    	   public void actionPerformed(ActionEvent event){
 	    		   try{
-	    			   String edit = note.getEdit();
-	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
-	    			   rss.next();
-	    			   System.out.print(rs.getString("subject"));
+//	    			   String edit = note.getEdit();
+//	    			   ResultSet rs = dbCon.getResultSetEdit(note.getEdit());
+//	    			   rs.next();
+//	    			   System.out.print(rs.getString("subject"));
+	    			   
+	    			   dbCon.updateNote("Allen", "Updated", "upate.wav", date, "9:30", "1602");
+	    			   
+	    			   
 	    		   }catch (SQLException ex){
 	    			   ex.printStackTrace();
 	    		   }
