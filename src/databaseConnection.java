@@ -83,6 +83,12 @@ public class databaseConnection {
     	 
     }
     
+    public ResultSet getResultSetEdit(String id)throws SQLException{
+    	String sqlEdit = "SELECT * FROM tblAlarm WHERE id = " + id + "";
+    	
+    	return stmt.executeQuery(sqlEdit);
+    }
+    
     public int deleteSQL(String id[])throws SQLException{
     	String sqlDelete = "DELETE FROM tblAlarm WHERE id IN (";
     	for (int i = 0; i < id.length; i++){

@@ -101,7 +101,7 @@ public class Note extends JPanel{ // 8-31-2015
 		 model.setRowCount(25);
 		 int row = dbCon.getSize();  
 		 if (row > 25) model.setRowCount(row);
-		 System.out.printf("row count %d", row);
+//		 System.out.printf("row count %d", row);
       	 ResultSet rs = dbCon.getResultSet();
       	 int i = 0;
       	 while (rs.next()){
@@ -125,11 +125,15 @@ public class Note extends JPanel{ // 8-31-2015
       		table.setValueAt(false, j, 6);	 
       	 }
       	 count = 0;
-      	 System.out.printf("getrowcount() %d,", model.getRowCount());
+//      	 System.out.printf("getrowcount() %d,", model.getRowCount());
        }catch (SQLException ex){
       	 System.out.print(ex.getMessage());
        }
 	
+   }
+   public String getEdit(){
+	   int selectRow = table.getSelectedRow();
+	   return  model.getValueAt(selectRow, 0).toString();
    }
    
    
@@ -168,11 +172,15 @@ public class Note extends JPanel{ // 8-31-2015
 	  return ids;
    }
     
+   
+   
+   
     //trigger when checkbox is checked in cell
     private class tableModelListener implements TableModelListener{    	
     	public void tableChanged(TableModelEvent event) {
             int row = event.getLastRow();
             int col = event.getColumn();
+//            System.out.printf("this is row %d, col %d\n", row, col);
             if (col == 6) {
                 TableModel model = (TableModel) event.getSource();
                 enableBtnDelete = (Boolean) model.getValueAt(row, col);  
