@@ -43,11 +43,13 @@ public class Clock extends JPanel{
 		mAngle -= ((minutes * 6) + (seconds * mAnglePerSecond)); // (minutes * 60 * 0.1) 
 //		hAngle -= (hours * 3600 * hAnglePerSecond) + ((minutes * 6) + (seconds * hAnglePerSecond)); 
 		hAngle -= (hours * 3600 + minutes * 60 + seconds) * hAnglePerSecond;
-
+		
+		
 		ticking();
 		ActionListener actionTask = new ActionListener(){
 			public void actionPerformed(ActionEvent event){				
 				ticking();			
+				
 				repaint();
 			}
 		};

@@ -2,9 +2,17 @@ import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.sql.SQLException;
 import javax.swing.JPanel;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.BoxLayout;
 import java.util.Date;
 import java.sql.ResultSet;
+
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 //MUST run "startNetworkServer" at "/usr/lib/jvm/java-8-oracle/db/bin" to run this program
 
@@ -17,16 +25,34 @@ public class Main {
 		Dimension dim = new Dimension(2200, 1600);
 		JFrame frame = new JFrame("Alarm Clock");
 		Date date = new Date();
-		String id[] = {"1081, 10119"};
-		int rowNumber = 25;
+		Alert alert = new Alert();
+		
+		
+		
+		
+//		System.out.println(getClass().getResource("hello.wav").toString());
+//	    try {
+//
+//	        AudioInputStream audioInputStream = 
+//	        		AudioSystem.getAudioInputStream();
+//	        Clip clip = AudioSystem.getClip();
+//	        clip.open(audioInputStream);
+//	        clip.start();
+//	    } catch(Exception ex) {
+//	        System.out.println("Error with playing sound.");
+//	        ex.printStackTrace();
+//	    }
+		
+		
+		
+		
 		
 		try{
-
+			
 			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");		
 			dbCon.insert("OPL Summer class", "Meeting on every other sunday at 9am. go for it ", "blue.wav", date, "11:35");
-//			dbCon.deleteAll();
-			if (dbCon.getSize() > 25) rowNumber = dbCon.getSize();		
-//			System.out.printf("getSize %d", dbCon.getSize());
+//			dbCon.deleteAll();	
+			alert.playSound();
 			
 		}catch (SQLException ex){
 			ex.printStackTrace();
@@ -34,6 +60,7 @@ public class Main {
 		catch (ValueException ex){
 			System.out.print(ex.getMessage());
 		}
+		
 		
 		
 		

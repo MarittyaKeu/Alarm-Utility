@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.ButtonGroup;
+import javax.sound.sampled.Clip;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -24,10 +25,12 @@ public class Alarm extends JPanel {
 	databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");
 //	Note note = new Note(25);
 //	Note note2;
+	
+	Alert alert = new Alert();
 	public Alarm() throws SQLException{
 		
 		 super.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		 
+		alert.playSound();
 		 
 	       //labels to hold time/subject/Body
 	       JLabel lblTime, lblSub, lblBody, lblSound;
@@ -158,12 +161,13 @@ public class Alarm extends JPanel {
 	       //clear button action listener
 	       clearButton.addActionListener(new ActionListener() {
 	    	   public void actionPerformed(ActionEvent event) {
-	    		   if(event.getSource() == clearButton) {
-	    			   hField.setText("");
-		    	       mField.setText("");
-		    		   subField.setText("");
-		    		   bodyTextArea.setText("");
-	    		      }
+//	    		   if(event.getSource() == clearButton) {
+//	    			   hField.setText("");
+//		    	       mField.setText("");
+//		    		   subField.setText("");
+//		    		   bodyTextArea.setText("");
+//	    		      }
+	    		  alert.stopSound();
 	    	    }
 	       });
 	       

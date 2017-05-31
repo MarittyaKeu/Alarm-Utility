@@ -39,7 +39,7 @@ public class Note extends JPanel{ // 8-31-2015
     public Note() throws SQLException{
     	super.setLayout(new BorderLayout());
     	
-  	   model = new DefaultTableModel(columnsName, 25);   
+  	   model = new DefaultTableModel(columnsName, 0);   
   	   table = new JTable(model){      	
              public boolean isCellEditable(int row, int col){
              	try{
@@ -98,9 +98,9 @@ public class Note extends JPanel{ // 8-31-2015
    public  void loadTable(){
 	   
 	   try{  	 
-		 model.setRowCount(25);
-		 int row = dbCon.getSize();  
-		 if (row > 25) model.setRowCount(row);
+//		 model.setRowCount(25);
+//		 int row = dbCon.getSize();  
+		 model.setRowCount(dbCon.getSize());
 //		 System.out.printf("row count %d", row);
       	 ResultSet rs = dbCon.getResultSet();
       	 int i = 0;
@@ -114,16 +114,16 @@ public class Note extends JPanel{ // 8-31-2015
       		 table.setValueAt(false, i, 6);	 
       		 i++;
       	 }
-      	 
-      	 for (int j = i; j < model.getRowCount(); j++){
-      		table.setValueAt("", j, 0);
-      		table.setValueAt("", j, 1);
-      		table.setValueAt("", j, 2);
-      		table.setValueAt("", j, 3);
-      		table.setValueAt("", j, 4);
-      		table.setValueAt("", j, 5);
-      		table.setValueAt(false, j, 6);	 
-      	 }
+//      	 
+//      	 for (int j = i; j < model.getRowCount(); j++){
+//      		table.setValueAt("", j, 0);
+//      		table.setValueAt("", j, 1);
+//      		table.setValueAt("", j, 2);
+//      		table.setValueAt("", j, 3);
+//      		table.setValueAt("", j, 4);
+//      		table.setValueAt("", j, 5);
+//      		table.setValueAt(false, j, 6);	 
+//      	 }
       	 count = 0;
 //      	 System.out.printf("getrowcount() %d,", model.getRowCount());
        }catch (SQLException ex){
