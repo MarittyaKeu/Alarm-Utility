@@ -22,7 +22,7 @@ public class Main {
 //	@SuppressWarnings("unused")
 	public static void main(String[] args)throws SQLException {
 		// TODO Auto-generated method stub
-		Dimension dim = new Dimension(2200, 1600);
+		Dimension dim = new Dimension(2200, 1700);
 		JFrame frame = new JFrame("Alarm Clock");
 		Date date = new Date();
 		Alert alert = new Alert();
@@ -50,16 +50,12 @@ public class Main {
 		try{
 			
 			databaseConnection dbCon = new databaseConnection("dbAlarm", "uml", "alarmClock128");		
-			dbCon.insert("OPL Summer class", "Meeting on every other sunday at 9am. go for it ", "blue.wav", date, "11:35");
-//			dbCon.deleteAll();	
-			alert.playSound();
+//			alert.playSound();
 			
 		}catch (SQLException ex){
 			ex.printStackTrace();
 		}
-		catch (ValueException ex){
-			System.out.print(ex.getMessage());
-		}
+		
 		
 		
 		
@@ -75,10 +71,10 @@ public class Main {
 		
 		container1.setLayout(new BoxLayout(container1, BoxLayout.X_AXIS));	
 		container2.setLayout(new BoxLayout(container2, BoxLayout.X_AXIS));
-		
+//		cal.setSize(new Dimension(250, 900));
 		container1.add(clock);
 		container1.add(cal);
-		
+
 //		container2.add(alarm);
 //		container2.add(note);
 

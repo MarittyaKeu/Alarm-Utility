@@ -73,10 +73,12 @@ public class Note extends JPanel{ // 8-31-2015
          table.getColumnModel().getColumn(5).setPreferredWidth(150);
          table.getColumnModel().getColumn(6).setPreferredWidth(50);
          
+      
+         
 //         table.addMouseListener(new mouseAdapter());
          table.getModel().addTableModelListener(new tableModelListener());
          
-        
+         
          
          
          table.setRowHeight(35);
@@ -96,22 +98,20 @@ public class Note extends JPanel{ // 8-31-2015
     
     
    public  void loadTable(){
-	   
 	   try{  	 
-//		 model.setRowCount(25);
-//		 int row = dbCon.getSize();  
 		 model.setRowCount(dbCon.getSize());
-//		 System.out.printf("row count %d", row);
       	 ResultSet rs = dbCon.getResultSet();
       	 int i = 0;
       	 while (rs.next()){
-      		 table.setValueAt(rs.getString("ID"), i, 0);
-      		 table.setValueAt(rs.getString("date"), i, 1);
-      		 table.setValueAt(rs.getString("time"), i, 2);
-      		 table.setValueAt(rs.getString("subject"), i, 3);
-      		 table.setValueAt(rs.getString("body"), i, 4);
-      		 table.setValueAt(rs.getString("sound"), i, 5);
-      		 table.setValueAt(false, i, 6);	 
+      		 
+//      		 model.setValueAt(i + 1, i, 0);
+      		model.setValueAt(rs.getString("ID"), i, 0);
+      		model.setValueAt(rs.getString("date"), i, 1);
+      		model.setValueAt(rs.getString("time"), i, 2);
+      		model.setValueAt(rs.getString("subject"), i, 3);
+      		model.setValueAt(rs.getString("body"), i, 4);
+      		model.setValueAt(rs.getString("sound"), i, 5);
+      		model.setValueAt(false, i, 6);	 
       		 i++;
       	 }
 //      	 
@@ -186,7 +186,6 @@ public class Note extends JPanel{ // 8-31-2015
                 enableBtnDelete = (Boolean) model.getValueAt(row, col);  
                 if (enableBtnDelete){
                 	count++; 
-                	
                 	id.add((String)model.getValueAt(row, 0));
                 }else{
                 	count--;

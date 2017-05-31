@@ -30,7 +30,7 @@ public class Alarm extends JPanel {
 	public Alarm() throws SQLException{
 		
 		 super.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		alert.playSound();
+//		alert.playSound();
 		 
 	       //labels to hold time/subject/Body
 	       JLabel lblTime, lblSub, lblBody, lblSound;
@@ -167,7 +167,7 @@ public class Alarm extends JPanel {
 //		    		   subField.setText("");
 //		    		   bodyTextArea.setText("");
 //	    		      }
-	    		  alert.stopSound();
+//	    		  alert.stopSound();
 	    	    }
 	       });
 	       

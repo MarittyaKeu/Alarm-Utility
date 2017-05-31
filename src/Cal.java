@@ -7,31 +7,47 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JPanel;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+
 public class Cal extends JPanel{
-	private int month, year, date, day, lastDate, npMonth; //nextPreviousMonth
+	private int month, year, date, day, lastDate, npMonth, npYear;//nextPreviousMonth
 	private dayName dName; 
+	private boolean previousBtn = false;
+	private boolean nextBtn = false;
+	private Calendar now;
 	
 	
 	public Cal(){
 		super.setLayout(new BorderLayout());
-		Calendar now = Calendar.getInstance();
-		npMonth = month = now.get(Calendar.MONTH); //return month
-		year = now.get(Calendar.YEAR); //return year
-		date = now.get(Calendar.DATE); //return date
-		lastDate = now.getActualMaximum(Calendar.DAY_OF_MONTH); //return the last day of month
-		now.set(year, month, 1);
-		day = now.get(Calendar.DAY_OF_WEEK); //return day (Sunday = 1 to Saturday = 7)
+		now = Calendar.getInstance();
+		npMonth = month = now.get(Calendar.MONTH); //return current month, start from 0 to 11 => 5
+		npYear = year = now.get(Calendar.YEAR); //return current year => 2017
+		date = now.get(Calendar.DATE); //return current date => 20
+		setDate();
 		
+	    addMouseListener(new mouseAdapter());
+	    addMouseMotionListener(new mouseMotion());
 //		System.out.printf("Year %d Month %d Date %d Day of week %d", year, month, date, day);
 	}
 	
+	private void setDate(){
 	
-	private  ArrayList<FullMonth<Integer, String>> getFullMonth(int day, int lastMonth){
+//		System.out.println(month);
+		now.set(year, month, 1);
+		lastDate = now.getActualMaximum(Calendar.DAY_OF_MONTH); //return the last date of month => 30
+		day = now.get(Calendar.DAY_OF_WEEK); //return day (Sunday = 1 to Saturday = 7)
+	}
+	
+	
+	private  ArrayList<FullMonth<Integer, String>> getFullMonth(int dayOfFirstMonth, int lastDateOfMonth){
 		ArrayList<FullMonth<Integer, String>> fMonth = new ArrayList<FullMonth<Integer, String>>();
 		int i = 1;
 		
 		do {
-			switch (day){
+			switch (dayOfFirstMonth){
 				case 0: dName = dayName.SUN; break;
 				case 1: dName = dayName.MON; break;
 				case 2: dName = dayName.TUE; break;
@@ -40,10 +56,10 @@ public class Cal extends JPanel{
 				case 5: dName = dayName.FRI; break;
 				default: dName = dayName.SAT;
 			}
-			day = (day + 1) % 7;
+			dayOfFirstMonth = (dayOfFirstMonth + 1) % 7;
 			fMonth.add(new FullMonth<Integer, String>(i, dName.getDayName()));
 			i++;
-		}while(i <= lastMonth); 
+		}while(i <= lastDateOfMonth); 
 		return fMonth;	
 	}
 	
@@ -57,7 +73,7 @@ public class Cal extends JPanel{
 		
 		g.setFont(new Font("arial", Font.BOLD, 30));
 		g.drawString(getMonthName(month).getMonthName(), 260, 70);
-		g.drawString(getYear(), 405, 70);
+		g.drawString(getYear(), 505, 70);
 		g.setFont(new Font("arial", Font.BOLD, 22));
 		g.drawString("SUN", arrX[0], y);
 		g.drawString("MON", arrX[1], y);
@@ -72,7 +88,10 @@ public class Cal extends JPanel{
 		int yPreviousButton[] = {60, 70, 50};
 		Polygon btnNext = new Polygon(xNextButton, yNextButton, 3);
 		Polygon btnPreview = new Polygon(xPreviousButton, yPreviousButton, 3);
+		
+		if (previousBtn) g.setColor(Color.RED); else g.setColor(Color.BLACK);
 		g.fillPolygon(btnPreview);
+		if (nextBtn) g.setColor(Color.RED);  else g.setColor(Color.BLACK);
 		g.fillPolygon(btnNext);
 				
 		for (int i = 0; i < mon.size(); i++){			
@@ -86,9 +105,9 @@ public class Cal extends JPanel{
 				default : j = 0; if (i > 0) y += 60;			
 			}
 			
-			if ((month == npMonth) && (date == mon.get(i).getDay())){
+			if ((month == npMonth) && (date == mon.get(i).getDay()) && (npYear == year)){
 				g.setColor(Color.RED);
-				g.setFont(new Font("arial", Font.BOLD, 25));
+				g.setFont(new Font("arial", Font.BOLD, 30));
 			}else{
 				g.setColor(Color.BLACK);
 				g.setFont(new Font("arial", Font.PLAIN, 22));
@@ -176,4 +195,53 @@ public class Cal extends JPanel{
 		return mName;
 	}
 	
+	
+	private class mouseAdapter extends MouseAdapter{
+	    // add the mouse release event
+	    public void mouseReleased(MouseEvent event){ 
+	    	 if ((event.getX() >= 50 && event.getX() <= 70) && (event.getY() >= 50 && event.getY() <= 70)){
+		    	  	if (month == 0){
+		    	  		month = 11;
+		    	  		year--;
+		    	  	}else{
+		    	  		month--;
+		    	  	}
+		    	  	setDate();
+		    	  	repaint();
+		      }else if ((event.getX() >= 660 && event.getX() <= 690) && (event.getY() >= 50 && event.getY() <= 70)){
+		    	  if (month == 11){
+		    	  		month = 0;
+		    	  		year++;
+		    	  	}else{
+		    	  		month++;
+		    	  	}
+		    	  setDate();
+		    	  repaint();
+		      }  
+		      
+	    }
+	}
+
+	
+	private class mouseMotion extends MouseMotionAdapter{ 
+		// add mouse move/hover motion listener
+	    public void mouseMoved(MouseEvent event){
+	      if ((event.getX() >= 50 && event.getX() <= 70) && (event.getY() >= 50 && event.getY() <= 70)){
+	    	  	previousBtn = true; nextBtn = false;    
+	    	  	
+	      }else if ((event.getX() >= 660 && event.getX() <= 690) && (event.getY() >= 50 && event.getY() <= 70)){
+	    	  previousBtn = false; nextBtn = true;  
+	      }else{
+	    	  previousBtn = false; nextBtn = false;  
+	      }      
+	      repaint();
+	      
+	    }
+	    
+	   
+	}
+	
 }
+
+
+
