@@ -1,0 +1,14 @@
+to run the AlarmClock program, first you need to connect the database driver. 
+
+1: to connect using eclipse. right click on the default package -> build path -> configure build  	path -> libraries -> add external JARs -> derbyclient.jar -> ok
+
+2: run the server. usually locate at the directory where we install the JDK.
+   go to  "/usr/lib/jvm/java-8-oracle/db/bin" and run "startNetworkServer"
+   you may run with sudo if denied access due to priviledge
+
+-----------
+
+when trying to add a note, the time fields should be enter with 2 digits. because i have not 
+validate it . 
+
+June/09/2017
