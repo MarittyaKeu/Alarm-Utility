@@ -252,6 +252,9 @@ public class Alarm extends JPanel {
 	    			   String hour, minute;
 	    			   
 	    			   rs.next();
+	    			   yearField.setText((String) rs.getString("date").subSequence(0, 4));
+	    			   monthField.setText((String) rs.getString("date").subSequence(5, 7));
+	    			   dateField.setText((String) rs.getString("date").subSequence(8, 10));
 	    			   mField.setText((String) rs.getString("time").subSequence(3, 5));
 	    			   hField.setText((String) rs.getString("time").subSequence(0, 2));
 	    			   subField.setText(rs.getString("subject"));
